@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
@@ -25,15 +26,34 @@ public class Connector {
 		return instance;
 	}
 	public String execute(String query) throws SQLException {
-		 System.out.printf("Connected.\n");
 		 String SQL = "SELECT * FROM Folder"; //Don't forget to remove it
+		 String result = "";
 		 Statement stmt = con.createStatement();
-		 ResultSet rs = stmt.executeQuery(query);
-		 while (rs.next())  
-            {  
-               System.out.println(rs.getString(1) + " " + rs.getString(2));  
-            }
-		return null;
+		 if(query.toLowerCase().contains("select")) {
+			 ResultSet rs = stmt.executeQuery(query);
+			 ResultSetMetaData rsmd = rs.getMetaData();
+			 int colNum = rsmd.getColumnCount();
+			 System.out.printf("Num of colums: %d\n",colNum);
+			 StringBuffer sb = new StringBuffer();
+			 while (rs.next())  
+	            {
+	               for(int i=1;i<=colNum;i++) {
+	            	   sb.append(rsmd.getColumnLabel(i));
+	            	   sb.append("\t");
+	               }
+	              sb.append("\n");
+	               
+	               for(int i=1;i<=colNum;i++) {
+	            	   sb.append(rs.getString(i));
+	            	   sb.append("\t");
+	               }
+	            }
+			 result = sb.toString();
+		 }else if(query.toLowerCase().contains("update")){
+			 int res = stmt.executeUpdate(query);
+		 }
+		 System.out.println(result);
+		return result;
 	}
 	
 	private Connection getConnection(Map<String,String> config) {
@@ -61,6 +81,7 @@ public class Connector {
 					);
 			
 			 con = DriverManager.getConnection(mysql);
+			 System.out.printf("Connected.\n");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
