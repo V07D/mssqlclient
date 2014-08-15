@@ -13,7 +13,7 @@ import java.util.Properties;
 public class Main {
 
 	public static void main(String[] args) {
-		f("Hello!");
+		Connector.getInstance().execute(ConfigManager.getInstance().configure());
 	}
 	
 	private static void f(String arg0, Object... args) {

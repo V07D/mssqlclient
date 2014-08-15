@@ -30,7 +30,13 @@ public class Connector {
         
         try {
         	
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        	String host = config.get("host");
+        	String name = config.get("name");
+        	String login = config.get("login");
+        	String password = config.get("password");
+        	Class.forName("com.mysql.jdbc.Driver");
+        	String mysql = String.format("jdbc:mysql://%s/%s?user=%s&password=%s",host,name,login,password);
 			String connectionUrl = String.format("jdbc:sqlserver://%s;databaseName=%s;%s%s%suser=%s;password=%s;", 
 					config.get("host"),
 					config.get("name"),
@@ -41,9 +47,9 @@ public class Connector {
 					config.get("password")
 					);
 			
-			 Connection con = DriverManager.getConnection(connectionUrl);
+			 Connection con = DriverManager.getConnection(mysql);
 			 System.out.printf("Connected.\n");
-			 String SQL = "SELECT * FROM EmployeeOTRS WHERE Surname='Снегирькова'"; //Don't forget to remove it
+			 String SQL = "SELECT * FROM Folder"; //Don't forget to remove it
 			 Statement stmt = con.createStatement();
 			 ResultSet rs = stmt.executeQuery(SQL);
 			 while (rs.next())  

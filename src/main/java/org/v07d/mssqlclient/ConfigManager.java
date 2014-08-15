@@ -40,9 +40,9 @@ private static ConfigManager instance = null;
 			String useUnicode = property.getProperty("db.useUnicode");
 			useUnicode = useUnicode != null && useUnicode.equals("true") ? "useUnicode=true;" : "";
 			String characterEncoding = property.getProperty("db.characterEncoding");
-			characterEncoding = (characterEncoding == null || characterEncoding.equals("")) ? "characterEncoding=UTF-8;" : "characterEncoding="+characterEncoding+";";
+			characterEncoding = (characterEncoding == null || characterEncoding.equals("")) ? "" : "characterEncoding="+characterEncoding+";";
 			String characterSetResults = property.getProperty("db.characterSetResults");
-			characterSetResults = (characterSetResults == null || characterSetResults.equals("")) ? "characterSetResults=UTF-8;" : "characterSetResults="+characterSetResults+";";
+			characterSetResults = (characterSetResults == null || characterSetResults.equals("")) ? "" : "characterSetResults="+characterSetResults+";";
 			
 			config.put("host", host);
 			config.put("login", login);
