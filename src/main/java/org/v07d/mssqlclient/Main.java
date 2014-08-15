@@ -13,7 +13,11 @@ import java.util.Properties;
 public class Main {
 
 	public static void main(String[] args) {
-		Connector.getInstance().execute(ConfigManager.getInstance().configure());
+		try {
+			Connector.getInstance(ConfigManager.getInstance().configure()).execute("");
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void f(String arg0, Object... args) {

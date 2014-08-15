@@ -13,17 +13,30 @@ import java.util.Properties;
 
 public class Connector {
 	private static Connector instance = null;
+	private Connection con;
 	
-	private Connector() {
-		
+	private Connector(Map<String,String> config) {
+		 con = getConnection(config);
 	}
-	public static Connector getInstance() {
+	public static Connector getInstance(Map<String,String> config) {
 		if(instance == null) {
-			instance = new Connector();
+			instance = new Connector(config);
 		}
 		return instance;
 	}
-	public String execute(Map<String,String> config) {
+	public String execute(String query) throws SQLException {
+		 System.out.printf("Connected.\n");
+		 String SQL = "SELECT * FROM Folder"; //Don't forget to remove it
+		 Statement stmt = con.createStatement();
+		 ResultSet rs = stmt.executeQuery(SQL);
+		 while (rs.next())  
+            {  
+               System.out.println(rs.getString(1) + " " + rs.getString(2));  
+            }
+		return null;
+	}
+	
+	private Connection getConnection(Map<String,String> config) {
 		FileInputStream fis;
         Properties property = new Properties();
         //databaseName=ZUP_Univrsal;useUnicode=true;characterEncoding=UTF-8;characterSetResults=UTF-8;
@@ -47,24 +60,15 @@ public class Connector {
 					config.get("password")
 					);
 			
-			 Connection con = DriverManager.getConnection(mysql);
-			 System.out.printf("Connected.\n");
-			 String SQL = "SELECT * FROM Folder"; //Don't forget to remove it
-			 Statement stmt = con.createStatement();
-			 ResultSet rs = stmt.executeQuery(SQL);
-			 while (rs.next())  
-	            {  
-	               System.out.println(rs.getString(1) + " " + rs.getString(2));  
-	            }
+			 con = DriverManager.getConnection(mysql);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return null;
-        
+		}    
+		return con;
 	}
 	
 	private static void f(String arg0, Object... args) {
