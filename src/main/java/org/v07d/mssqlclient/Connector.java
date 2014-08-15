@@ -28,7 +28,7 @@ public class Connector {
 		 System.out.printf("Connected.\n");
 		 String SQL = "SELECT * FROM Folder"; //Don't forget to remove it
 		 Statement stmt = con.createStatement();
-		 ResultSet rs = stmt.executeQuery(SQL);
+		 ResultSet rs = stmt.executeQuery(query);
 		 while (rs.next())  
             {  
                System.out.println(rs.getString(1) + " " + rs.getString(2));  

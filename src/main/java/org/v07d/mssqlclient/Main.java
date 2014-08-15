@@ -13,11 +13,8 @@ import java.util.Properties;
 public class Main {
 
 	public static void main(String[] args) {
-		try {
-			Connector.getInstance(ConfigManager.getInstance().configure()).execute("");
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
+		Connector con = Connector.getInstance(ConfigManager.getInstance().configure());
+		Commander commander = new Commander(con);
 	}
 	
 	private static void f(String arg0, Object... args) {
