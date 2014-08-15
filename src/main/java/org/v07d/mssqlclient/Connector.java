@@ -49,7 +49,7 @@ public class Connector {
 	               }
 	            }
 			 result = sb.toString();
-		 }else if(query.toLowerCase().contains("update")){
+		 }else if(query.toLowerCase().contains("insert")){
 			 int res = stmt.executeUpdate(query);
 		 }
 		 System.out.println(result);
