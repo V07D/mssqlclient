@@ -63,7 +63,7 @@ public class Connector {
         
         try {
         	
-			//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         	String host = config.get("host");
         	String name = config.get("name");
         	String login = config.get("login");
@@ -80,7 +80,7 @@ public class Connector {
 					config.get("password")
 					);
 			
-			 con = DriverManager.getConnection(mysql);
+			 con = DriverManager.getConnection(connectionUrl);
 			 System.out.printf("Connected.\n");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
