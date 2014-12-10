@@ -26,10 +26,9 @@ public class Connector {
 		return instance;
 	}
 	public String execute(String query) throws SQLException {
-		 String SQL = "SELECT * FROM Folder"; //Don't forget to remove it
 		 String result = "";
 		 Statement stmt = con.createStatement();
-		 if(query.toLowerCase().contains("select")) {
+		 try {
 			 ResultSet rs = stmt.executeQuery(query);
 			 ResultSetMetaData rsmd = rs.getMetaData();
 			 int colNum = rsmd.getColumnCount();
@@ -49,8 +48,12 @@ public class Connector {
 	               }
 	            }
 			 result = sb.toString();
-		 }else if(query.toLowerCase().contains("insert")){
-			 int res = stmt.executeUpdate(query);
+		 }catch(Exception e){ //TODO: make it not so ugly
+			 try {
+				 int res = stmt.executeUpdate(query);
+			 }catch(SQLException se) {
+				 throw new SQLException(se);
+			 }
 		 }
 		 System.out.println(result);
 		return result;
