@@ -15,9 +15,11 @@ import java.util.Properties;
 public class Connector {
 	private static Connector instance = null;
 	private Connection con;
+	private Viewer viewer;
 	
 	private Connector(Map<String,String> config) {
 		 con = getConnection(config);
+		 viewer = new SimpleConsoleViewer(); //TODO: load from config
 	}
 	public static Connector getInstance(Map<String,String> config) {
 		if(instance == null) {
@@ -26,36 +28,23 @@ public class Connector {
 		return instance;
 	}
 	public String execute(String query) throws SQLException {
-		 String result = "";
-		 Statement stmt = con.createStatement();
-		 try {
-			 ResultSet rs = stmt.executeQuery(query);
-			 ResultSetMetaData rsmd = rs.getMetaData();
-			 int colNum = rsmd.getColumnCount();
-			 System.out.printf("Num of colums: %d\n",colNum);
-			 StringBuffer sb = new StringBuffer();
-			 while (rs.next())  
-	            {
-	               for(int i=1;i<=colNum;i++) {
-	            	   sb.append(rsmd.getColumnLabel(i));
-	            	   sb.append("\t");
-	               }
-	              sb.append("\n");
-	               
-	               for(int i=1;i<=colNum;i++) {
-	            	   sb.append(rs.getString(i));
-	            	   sb.append("\t");
-	               }
-	            }
-			 result = sb.toString();
-		 }catch(Exception e){ //TODO: make it not so ugly
-			 try {
-				 int res = stmt.executeUpdate(query);
-			 }catch(SQLException se) {
-				 throw new SQLException(se);
-			 }
-		 }
-		 System.out.println(result);
+		String result = "";
+		Statement stmt = con.createStatement();
+		ResultSet rs = null;
+		ResultSetMetaData rsmd = null;
+		try {
+			rs = stmt.executeQuery(query);
+			rsmd = rs.getMetaData();
+		} catch (Exception e) { // TODO: make it not so ugly
+			try {
+				int res = stmt.executeUpdate(query);
+			} catch (SQLException se) {
+				throw new SQLException(se);
+			}
+		}
+		if(rs != null && rsmd != null) {
+			viewer.view(rs, rsmd);
+		}
 		return result;
 	}
 	
